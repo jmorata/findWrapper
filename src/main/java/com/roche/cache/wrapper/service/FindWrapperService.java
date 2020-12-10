@@ -67,10 +67,6 @@ public class FindWrapperService {
     }
 
     private void searchString(File file, String searchString) throws IOException {
-        if (file.getName().equals("EMCLLEER9.xml")) {
-            System.out.println("");
-        }
-
         if (file.getName().contains(".xml")) {
             Path path = FileSystems.getDefault().getPath(file.getPath());
             Files.lines(path).filter(line -> line.toUpperCase().contains(searchString.toUpperCase())).forEach(line -> {
@@ -92,7 +88,7 @@ public class FindWrapperService {
         if (containsEqualAtRight(line, searchString)) {
             searchString = line.split("=")[0];
             String[] splitString = searchString.split(" ");
-            searchString = " " + splitString[splitString.length - 1] + ".(";
+            searchString = " " + splitString[splitString.length - 1] + ".";
             searchString(file, searchString);
         }
     }
