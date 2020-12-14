@@ -7,9 +7,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
-import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(JUnitParamsRunner.class)
 public class FindWrapperCollectionServiceShould {
@@ -19,18 +18,22 @@ public class FindWrapperCollectionServiceShould {
 
     @Test
     @Parameters({
-            "Return (objSQL.ActivationDate = \"\"), objSQL, ActivationDate",
-            "\t#Dim objSQL As %SQL.StatementResult = ##class(%SQL.Statement).%ExecDirect(\\, strSQL\\, objBracketingRule.ID), ##class(%SQL.Statement), %ExecDirect"
+            "Return (objSQL.ActivationDate = \"\"), objSQL, ",
+            "\t#Dim objSQL As %SQL.StatementResult = ##class(%SQL.Statement).%ExecDirect(\\, strSQL\\, objBracketingRule.ID), ##class(%SQL.Statement), %ExecDirect",
+            "Return ##class(%File).GetDirectoryPiece(path\\, 1), ##class(%File), GetDirectoryPiece",
+            "Quit $Extract(pstrPatientID1\\, 0\\, intInitialPos - 1)_\"@\"_$Extract(pstrPatientID1\\, objSQL.CharactersNumber + intInitialPos\\, $Length(pstrPatientID1)), objSQL, ",
+            "##class(sp.spMisc).spConvertToRegional(ssrSQL.ValueResultDate\\,\"date\"\\,pstrRegionalSettingsLIS)_$Char(172)_, ssrSQL, "
     })
-
     public void addToCollection(String line, String term, String foundTerm) throws Exception {
         findWrapperSearchService = new FindWrapperSearchService();
         findWrapperSearchService.addToCollection(file, line, term + ".");
-        assertThat(foundTerm.equals(getFirstCollectionEntry()));
+
+        assertTrue(findWrapperSearchService.getCollection().size()<=1);
+        assertTrue(foundTerm.equals(getFirstCollectionEntry().getMethod()));
     }
 
-    private Optional<Method> getFirstCollectionEntry() {
-        return findWrapperSearchService.getCollection().stream().findFirst();
+    private Method getFirstCollectionEntry() {
+        return findWrapperSearchService.getCollection().stream().findFirst().orElse(Method.builder().method("").build());
     }
 
 }

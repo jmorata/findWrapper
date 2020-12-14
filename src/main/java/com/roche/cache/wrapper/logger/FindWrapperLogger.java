@@ -18,7 +18,8 @@ public class FindWrapperLogger {
     public static void printCollection(Set<Method> searchTermCollection) {
         System.out.println("\nMethods found: " + searchTermCollection.size());
         System.out.println("=================");
-        searchTermCollection.stream().forEach(entry -> System.out.println(entry));
+        searchTermCollection.stream().forEach(entry -> System.out.println(entry.getMethod()));
+//        searchTermCollection.stream().forEach(entry -> System.out.println(entry));
     }
 
     public static void printDirectory(File file, int fileCount) throws IOException {

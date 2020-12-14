@@ -37,6 +37,10 @@ public class FindWrapperSearchService {
 
     public void addToCollection(File file, String line, String term) throws Exception {
         try {
+            if (file.getPath().equals("D:\\tfs\\Roche.DE.LIS\\Dev_3.04.00\\Cache\\ACB\\Components\\co\\wka\\cLists.xml")) {
+                System.out.println();
+            }
+
             line = FindWrapperHandler.filterEscapeChars(line);
             if (line.contains("=")) {
                 String statement = line.split("=")[1];
@@ -44,11 +48,12 @@ public class FindWrapperSearchService {
                 if (method != null) {
                     addMethod(file, line, method);
 
-                    if (FindWrapperHandler.termContainsClass(term)) {
+                    if (isMethodNew(method) && FindWrapperHandler.termContainsClass(term)) {
                         statement = line.split("=")[0];
                         String argument = FindWrapperHandler.retrieveArgumentFromStatement(statement, term);
                         if (argument != null) {
-                            searchTermInFile(file, argument + ".");
+                            argument = " " + argument + ".";
+                            searchTermInFile(file, argument);
                         }
                     }
                 }
@@ -62,6 +67,10 @@ public class FindWrapperSearchService {
         } catch (Exception e) {
             FindWrapperLogger.getLocalizedError(e, term, line);
         }
+    }
+
+    private boolean isMethodNew(String method) {
+        return method.toUpperCase().equals("%NEW");
     }
 
     private void addMethod(File file, String line, String method) {

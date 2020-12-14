@@ -18,9 +18,10 @@ public class FindWrapperHandler {
         if (statement.contains(term)) {
             String method = statement.substring(statement.indexOf(term));
             method = method.replace(term, "");
+            method = getOnlyMethodName(method);
 
             if (method.contains("(")) {
-                method = getOnlyMethodName(method);
+                method = method.split("\\(")[0];
                 if (isValidLine(method)) {
                     return method;
                 }
@@ -41,8 +42,7 @@ public class FindWrapperHandler {
     }
 
     private static boolean isValidLine(String line) {
-        return line.endsWith("(")
-                && Pattern.compile("^[A-Z%]").matcher(line).find();
+        return Pattern.compile("^[A-Z%]").matcher(line).find();
     }
 
     public static String retrieveArgumentFromStatement(String statement, String term) {

@@ -42,7 +42,8 @@ public class Method implements Comparable<Method> {
 
     @Override
     public String toString() {
-        return method;
+        return "method='" + method + '\'' +
+                ", line='" + line + '\'' +
+                ", fileName='" + fileName + '\'';
     }
-
 }
